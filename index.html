@@ -498,6 +498,16 @@
     });
   });
 
+  // Quando embutido no painel-entrega-turbo, a sidebar (e as abas "Visões"
+  // que vivem nela) fica escondida — a navegação entre abas passa a vir do
+  // submenu que o painel host mostra na própria sidebar dele, via postMessage.
+  window.addEventListener('message', (event) => {
+    if (event.source !== window.parent) return;
+    if (!event.data || event.data.tipo !== 'ricapet-ponto-ir-para') return;
+    const btn = document.querySelector(`.tabs button[data-tab="${event.data.aba}"]`);
+    if (btn) btn.click();
+  });
+
   const ABONO_LABEL = { atestado: 'Atestado', ferias: 'Férias', folga: 'Folga', falta_abonada: 'Falta abonada', feriado: 'Feriado', licenca: 'Licença', outro: 'Abono' };
 
   const tolMin = () => (estado && estado.empresa && estado.empresa.tolerancia_min) || 0;
