@@ -115,6 +115,23 @@
   .tabs button.ativo { background: var(--accent); color: var(--ink-on-accent); font-weight: 700; }
   .tabs .badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 8px; border-radius: 999px; background: var(--bad); color: #fff; font-size: 0.7rem; font-weight: 700; }
 
+  /* Barra de abas horizontal embaixo do header — só aparece quando embutido
+     em iframe (a sidebar some inteira nesse caso, então as "Visões" ficam
+     inacessíveis sem isso). */
+  .tabs-topo { display: none; }
+  html.embutido .tabs-topo {
+    display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px;
+    max-width: 1000px; margin: 0 auto; padding: 10px 16px;
+    background: var(--sidebar-bg); border-bottom: 1px solid var(--sidebar-border);
+  }
+  .tabs-topo button {
+    display: flex; align-items: center; background: none; border: none;
+    border-radius: 8px; color: var(--sidebar-text); font-weight: 600; font-size: 13px;
+    padding: 8px 12px; cursor: pointer; font-family: inherit;
+  }
+  .tabs-topo button:hover { background: var(--sidebar-hover); }
+  .tabs-topo button.ativo { background: var(--accent); color: var(--ink-on-accent); font-weight: 700; }
+
   /* solicitações */
   .sol-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--warn); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px; }
   .sol-card.resolvida { border-left-color: var(--border); opacity: 0.72; }
@@ -300,6 +317,13 @@
     </div>
   </header>
 
+  <div class="tabs tabs-topo">
+    <button data-tab="solicitacoes" class="ativo">Solicitações <span class="badge" id="badge-pend-topo" hidden>0</span></button>
+    <button data-tab="funcionario">Por funcionário</button>
+    <button data-tab="geral">Visão geral</button>
+    <button data-tab="jornadas">Jornadas</button>
+  </div>
+
   <div class="shell">
     <section id="tab-solicitacoes"></section>
 
@@ -480,8 +504,9 @@
       return;
     }
     const pend = estado.pendentes || 0;
-    const badge = $('badge-pend');
-    badge.hidden = pend === 0; badge.textContent = pend;
+    [$('badge-pend'), $('badge-pend-topo')].forEach((badge) => {
+      badge.hidden = pend === 0; badge.textContent = pend;
+    });
     renderSolicitacoes();
     preencherSelectFunc();
     renderFuncionario();
@@ -493,7 +518,7 @@
   // abas
   document.querySelectorAll('.tabs button').forEach((b) => {
     b.addEventListener('click', () => {
-      document.querySelectorAll('.tabs button').forEach((x) => x.classList.toggle('ativo', x === b));
+      document.querySelectorAll('.tabs button').forEach((x) => x.classList.toggle('ativo', x.dataset.tab === b.dataset.tab));
       ['solicitacoes', 'funcionario', 'geral', 'jornadas'].forEach((t) => { $('tab-' + t).hidden = t !== b.dataset.tab; });
     });
   });
