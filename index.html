@@ -6,7 +6,7 @@
 <title>Ponto · Administração</title>
 <meta name="description" content="Painel de administração do ponto — Ricapet/Thapets.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#1e3a8a">
+<meta name="theme-color" content="#272456">
 <script>
   // Dentro de um iframe (ex.: aberto pelo painel-entrega-turbo)? O painel
   // que hospeda o iframe já mostra a sidebar — não repete aqui.
@@ -19,7 +19,8 @@
     --bg: #F4F6FB; --surface: #FFFFFF; --surface-2: #EEF2F9;
     --ink: #1B2A4A; --ink-soft: #566484; --ink-muted: #93A0BC;
     --border: #E2E8F3; --shadow: rgba(27,42,74,0.10);
-    --brand: #1d4ed8; --accent: #1d4ed8; --accent-bg: #bfdbfe; --accent-ink: #1e3a8a;
+    --brand: #f5a623; --accent: #f5a623; --accent-bg: #fdecc8; --accent-ink: #272456;
+    --ink-on-accent: #241f4d;
     --warn: #C77A08; --warn-bg: #FDF1E0;
     --ok: #1E7A48; --ok-bg: #E4F6EC; --bad: #C23B3B; --bad-bg: #FCE9E9;
     --info-bg: #E7F0FF; --info-tx: #2657C4;
@@ -27,8 +28,8 @@
     --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --radius: 16px; --radius-sm: 10px;
-    --page-bg: #eaf2fd;
-    --sidebar-bg: #1e3a8a;
+    --page-bg: #e7e9f7;
+    --sidebar-bg: #272456;
     --sidebar-text: #eef2ff;
     --sidebar-muted: #9db0dd;
     --sidebar-hover: rgba(255,255,255,0.08);
@@ -55,12 +56,12 @@
     white-space: nowrap;
   }
   .sidebar-link:hover { background: var(--sidebar-hover); }
-  .sidebar-link.ativo { background: var(--accent); color: #fff; }
-  .sidebar-link.ativo svg { stroke: #fff; }
+  .sidebar-link.ativo { background: var(--accent); color: var(--ink-on-accent); }
+  .sidebar-link.ativo svg { stroke: var(--ink-on-accent); }
   .sidebar-link svg { flex-shrink: 0; }
   .sidebar-separador { border: none; border-top: 1px solid var(--sidebar-border); margin: 14px 0; }
   .sidebar-footer { display: flex; align-items: center; gap: 10px; padding: 10px; margin-top: auto; border-top: 1px solid var(--sidebar-border); }
-  .sidebar-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+  .sidebar-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--ink-on-accent); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
   .sidebar-footer-name { font-size: 12px; font-weight: 700; color: var(--sidebar-text); }
   .sidebar-footer-sub { font-size: 11px; color: var(--sidebar-muted); }
   .conteudo-principal { margin-left: 240px; }
@@ -87,12 +88,12 @@
   .campo input { height: 46px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); padding: 0 13px; font-size: 15px; }
   .campo input:focus { outline: none; border-color: var(--accent); }
   input[type="password"] { letter-spacing: 8px; text-align: center; font-size: 18px; }
-  .btn-primario { width: 100%; height: 46px; border: none; border-radius: 11px; background: var(--brand); color: #fff; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .btn-primario { width: 100%; height: 46px; border: none; border-radius: 11px; background: var(--brand); color: var(--ink-on-accent); font-weight: 700; font-size: 15px; cursor: pointer; }
   .btn-primario:disabled { opacity: 0.45; cursor: default; }
   .erro { color: var(--bad); font-size: 0.82rem; min-height: 1.1em; margin: 4px 0 0; }
 
   /* header — barra azul estilo Oitchau */
-  header { position: sticky; top: 0; z-index: 5; background: var(--brand); }
+  header { position: sticky; top: 0; z-index: 5; background: var(--accent-ink); }
   .hrow { max-width: 1000px; margin: 0 auto; padding: 13px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .hrow h1 { font-family: var(--font-display); font-size: 1.05rem; margin: 0; margin-right: auto; color: #fff; }
   .periodo { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: rgba(255,255,255,0.85); }
@@ -111,7 +112,7 @@
     color: var(--sidebar-text); font-weight: 600; font-size: 13px; padding: 9px 10px; cursor: pointer; font-family: inherit;
   }
   .tabs button:hover { background: var(--sidebar-hover); }
-  .tabs button.ativo { background: var(--accent); color: #fff; font-weight: 700; }
+  .tabs button.ativo { background: var(--accent); color: var(--ink-on-accent); font-weight: 700; }
   .tabs .badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 8px; border-radius: 999px; background: var(--bad); color: #fff; font-size: 0.7rem; font-weight: 700; }
 
   /* solicitações */
@@ -185,7 +186,7 @@
   .modal-acoes { display: flex; gap: 10px; margin-top: 16px; }
   .modal-acoes button { flex: 1; height: 42px; border-radius: 999px; font-weight: 700; font-size: 0.9rem; cursor: pointer; }
   .modal-acoes .cancelar { border: 1px solid var(--border); background: none; color: var(--ink-soft); }
-  .modal-acoes .ok { border: none; background: var(--brand); color: #fff; }
+  .modal-acoes .ok { border: none; background: var(--brand); color: var(--ink-on-accent); }
   .modal-acoes .ok:disabled { opacity: 0.5; }
 
   .vazio { color: var(--ink-muted); font-size: 0.9rem; text-align: center; padding: 30px 10px; }
