@@ -653,7 +653,7 @@
           <div class="sol-motivo">${escHtml(s.motivo)}</div>
           <div class="sol-acoes">
             <button class="b-abrir" data-func="${s.funcionario_id}" data-dia="${s.data_referente}">Abrir o dia</button>
-            <button class="b-aprovar" data-id="${s.id}">Marcar aprovada</button>
+            <button class="b-aprovar" data-id="${s.id}" data-func="${s.funcionario_id}" data-dia="${s.data_referente}" data-motivo="${escHtml(s.motivo)}">Marcar aprovada</button>
             <button class="b-recusar" data-id="${s.id}">Recusar</button>
           </div>
         </div>`;
@@ -681,11 +681,28 @@
     }
     if (b.classList.contains('b-aprovar') || b.classList.contains('b-recusar')) {
       const decisao = b.classList.contains('b-aprovar') ? 'aprovar' : 'recusar';
+      const funcId = b.dataset.func;
+      const diaChave = b.dataset.dia;
+      const motivo = b.dataset.motivo;
       const resposta = prompt(decisao === 'aprovar' ? 'Observação (opcional):' : 'Motivo da recusa (opcional):') ?? '';
       b.disabled = true;
       try {
         await api('ponto-admin-resolver', { token: sessao.token, solicitacao_id: b.dataset.id, decisao, resposta });
+        // Aprovar só marca o pedido como resolvido — não mexe nas batidas
+        // sozinho (o motivo é texto livre, não dá pra confiar numa leitura
+        // automática pra gravar horário oficial). Por isso, ao aprovar,
+        // já leva o admin direto pro dia certo com o editor aberto, pra não
+        // ficar só na aprovação sem o ajuste real acontecer.
+        if (diaChave && diaChave < $('p-de').value) $('p-de').value = diaChave;
         await carregar();
+        if (decisao === 'aprovar' && funcId && diaChave) {
+          $('sel-func').value = funcId;
+          document.querySelector('.tabs button[data-tab="funcionario"]').click();
+          renderFuncionario();
+          const func = estado.funcionarios.find((f) => f.id === funcId);
+          const dia = func && montarFolha(func).find((d) => d.chave === diaChave);
+          if (func && dia) abrirEditorDia(func, dia, false, motivo);
+        }
       } catch (err) { alert(err.message); b.disabled = false; }
     }
   });
@@ -877,7 +894,7 @@
     </div>`;
   }
 
-  function abrirEditorDia(func, dia, focoAdd) {
+  function abrirEditorDia(func, dia, focoAdd, motivoSugerido) {
     modalCtx = { func, chave: dia.chave, originais: dia.eventos.map((e) => ({ nsr: String(e.nsr), tipo: e.tipo, hora: hhmm(e.quando) })) };
     $('modal-titulo').textContent = `${func.nome} — ${rotuloLongo(dia.data)}`;
     modalErro.textContent = '';
@@ -901,6 +918,7 @@
           ${ab ? '<button type="button" id="ab-remover" style="height:36px;border-radius:8px;border:1px solid var(--bad);background:none;color:var(--bad);font-weight:600;padding:0 12px;cursor:pointer">Remover</button>' : ''}
         </div>
       </div>`;
+    if (motivoSugerido) $('m-motivo').value = motivoSugerido;
     $('m-add').addEventListener('click', () => {
       const box = $('m-batidas');
       const p = box.querySelector('p'); if (p) p.remove();
